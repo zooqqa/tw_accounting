@@ -13,7 +13,15 @@ import sys
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 from app.core.config import settings
-from app.models import Base
+from sqlmodel import SQLModel
+
+# Импортируем все модели, чтобы они были зарегистрированы
+from app.models.users import User
+from app.models.accounts import Account
+from app.models.projects import Project
+from app.models.categories import Category
+from app.models.counterparties import Counterparty
+from app.models.transactions import Transaction, TransactionEntry, CryptoTransactionDetail
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -26,7 +34,7 @@ if config.config_file_name is not None:
 
 # add your model's MetaData object here
 # for 'autogenerate' support
-target_metadata = Base.metadata
+target_metadata = SQLModel.metadata
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:

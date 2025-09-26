@@ -16,6 +16,9 @@ engine = create_engine(
     pool_recycle=300,     # Переподключение каждые 5 минут
 )
 
+# Создание синхронного SessionLocal для создания сессий
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
 # Создание асинхронного движка для FastAPI-Users
 async_database_url = settings.DATABASE_URL.replace("postgresql://", "postgresql+asyncpg://")
 async_engine = create_async_engine(async_database_url, echo=settings.DEBUG)

@@ -71,8 +71,11 @@ class CryptoTransactionDetail(BaseModel, table=True):
     __tablename__ = "crypto_transaction_details"
     
     transaction_id: int = Field(foreign_key="transactions.id", description="ID транзакции")
-    tx_hash: str = Field(max_length=255, description="Хеш транзакции")
-    network: str = Field(max_length=50, description="Сеть (TRON, ETH, BTC)")
+    currency: str = Field(max_length=10, description="Криптовалюта (TRX, USDT)")
+    amount_crypto: Decimal = Field(description="Сумма в криптовалюте")
+    rate_to_usd: Decimal = Field(description="Курс к USD на момент операции")
+    tx_hash: Optional[str] = Field(default=None, max_length=255, description="Хеш транзакции")
+    network: Optional[str] = Field(default=None, max_length=50, description="Сеть (TRON, ETH, BTC)")
     wallet_from: Optional[str] = Field(default=None, max_length=255, description="Кошелек отправителя")
     wallet_to: Optional[str] = Field(default=None, max_length=255, description="Кошелек получателя")
     fee: Optional[Decimal] = Field(default=None, description="Комиссия")
