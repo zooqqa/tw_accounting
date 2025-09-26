@@ -59,7 +59,7 @@ async def root():
     }
 
 # Импорт API роутов
-from app.api import auth, accounts, projects, categories, counterparties
+from app.api import auth, accounts, projects, categories, counterparties, transactions
 
 # Включение роутов
 app.include_router(auth.router, prefix="/api", tags=["authentication"])
@@ -67,3 +67,4 @@ app.include_router(accounts.router, prefix="/api/accounts", tags=["accounts"])
 app.include_router(projects.router, prefix="/api/projects", tags=["projects"])
 app.include_router(categories.router, prefix="/api/categories", tags=["categories"])
 app.include_router(counterparties.router, prefix="/api/counterparties", tags=["counterparties"])
+app.include_router(transactions.router, prefix="/api/transactions", tags=["transactions"])

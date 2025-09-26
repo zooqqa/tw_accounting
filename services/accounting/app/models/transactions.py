@@ -89,7 +89,7 @@ class TransactionCreate(SQLModel):
     description: str
     type: TransactionType
     amount: Decimal
-    date: datetime
+    date: Optional[datetime] = None
     project_id: Optional[int] = None
     category_id: Optional[int] = None
     counterparty_id: Optional[int] = None
