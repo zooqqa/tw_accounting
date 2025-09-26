@@ -1,0 +1,110 @@
+version: '3.8'
+
+services:
+  # PostgreSQL с TimescaleDB
+  postgres:
+    image: timescale/timescaledb:latest-pg15
+    container_name: tw_accounting_postgres
+    environment:
+      POSTGRES_DB: tw_accounting
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    networks:
+      - tw_network
+
+  # Redis для кэширования и очередей
+  redis:
+    image: redis:7-alpine
+    container_name: tw_accounting_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - tw_network
+
+  # Accounting Service
+  accounting:
+    build:
+      context: ./services/accounting
+      dockerfile: Dockerfile
+    container_name: tw_accounting_service
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/tw_accounting
+      - REDIS_URL=redis://redis:6379
+      - SECRET_KEY=your-secret-key-here
+    ports:
+      - "8001:8000"
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - ./services/accounting:/app
+    networks:
+      - tw_network
+
+  # Traffic Analytics Service
+  traffic-analytics:
+    build:
+      context: ./services/traffic-analytics
+      dockerfile: Dockerfile
+    container_name: tw_traffic_analytics_service
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/tw_accounting
+      - REDIS_URL=redis://redis:6379
+      - SECRET_KEY=your-secret-key-here
+    ports:
+      - "8002:8000"
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - ./services/traffic-analytics:/app
+    networks:
+      - tw_network
+
+  # API Gateway
+  api-gateway:
+    build:
+      context: ./services/api-gateway
+      dockerfile: Dockerfile
+    container_name: tw_api_gateway
+    environment:
+      - ACCOUNTING_SERVICE_URL=http://accounting:8000
+      - TRAFFIC_ANALYTICS_SERVICE_URL=http://traffic-analytics:8000
+      - SECRET_KEY=your-secret-key-here
+    ports:
+      - "8000:8000"
+    depends_on:
+      - accounting
+      - traffic-analytics
+    volumes:
+      - ./services/api-gateway:/app
+    networks:
+      - tw_network
+
+  # Frontend (будет добавлен позже)
+  # frontend:
+  #   build:
+  #     context: ./frontend
+  #     dockerfile: Dockerfile
+  #   container_name: tw_frontend
+  #   ports:
+  #     - "3000:3000"
+  #   depends_on:
+  #     - api-gateway
+  #   networks:
+  #     - tw_network
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  tw_network:
+    driver: bridge
