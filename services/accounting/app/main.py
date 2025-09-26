@@ -12,7 +12,7 @@ from app.core.database import engine
 from app.models import Base
 
 # Создание таблиц
-Base.metadata.create_all(bind=engine)
+Base.create_all(bind=engine)
 
 # Создание FastAPI приложения
 app = FastAPI(
@@ -58,12 +58,12 @@ async def root():
         "docs": "/docs"
     }
 
-# Импорт API роутов
-from app.api import auth, accounts, projects, categories, counterparties
+# Импорт API роутов (временно отключены для запуска)
+# from app.api import auth, accounts, projects, categories, counterparties
 
-# Включение роутов
-app.include_router(auth.router, prefix="/api", tags=["authentication"])
-app.include_router(accounts.router, prefix="/api/accounts", tags=["accounts"])
-app.include_router(projects.router, prefix="/api/projects", tags=["projects"])
-app.include_router(categories.router, prefix="/api/categories", tags=["categories"])
-app.include_router(counterparties.router, prefix="/api/counterparties", tags=["counterparties"])
+# Включение роутов (временно отключены)
+# app.include_router(auth.router, prefix="/api", tags=["authentication"])
+# app.include_router(accounts.router, prefix="/api/accounts", tags=["accounts"])
+# app.include_router(projects.router, prefix="/api/projects", tags=["projects"])
+# app.include_router(categories.router, prefix="/api/categories", tags=["categories"])
+# app.include_router(counterparties.router, prefix="/api/counterparties", tags=["counterparties"])
