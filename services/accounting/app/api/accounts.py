@@ -14,7 +14,7 @@ from app.models.accounts import Account, AccountCreate, AccountUpdate, AccountRe
 router = APIRouter()
 
 @router.get("/", response_model=List[AccountRead])
-async def get_accounts(
+def get_accounts(
     skip: int = 0,
     limit: int = 100,
     db: Session = Depends(get_session),
@@ -26,7 +26,7 @@ async def get_accounts(
     return accounts
 
 @router.get("/{account_id}", response_model=AccountRead)
-async def get_account(
+def get_account(
     account_id: int,
     db: Session = Depends(get_session),
     user: User = Depends(current_active_user)
@@ -41,20 +41,20 @@ async def get_account(
     return account
 
 @router.post("/", response_model=AccountRead)
-async def create_account(
+def create_account(
     account_data: AccountCreate,
     db: Session = Depends(get_session),
     user: User = Depends(current_active_user)
 ):
     """Создание нового счета"""
-    account = Account(**account_data.dict())
+    account = Account(**account_data.model_dump())
     db.add(account)
     db.commit()
     db.refresh(account)
     return account
 
 @router.put("/{account_id}", response_model=AccountRead)
-async def update_account(
+def update_account(
     account_id: int,
     account_data: AccountUpdate,
     db: Session = Depends(get_session),
@@ -68,7 +68,7 @@ async def update_account(
             detail="Account not found"
         )
     
-    for field, value in account_data.dict(exclude_unset=True).items():
+    for field, value in account_data.model_dump(exclude_unset=True).items():
         setattr(account, field, value)
     
     db.add(account)
@@ -77,7 +77,7 @@ async def update_account(
     return account
 
 @router.delete("/{account_id}")
-async def delete_account(
+def delete_account(
     account_id: int,
     db: Session = Depends(get_session),
     user: User = Depends(current_active_user)

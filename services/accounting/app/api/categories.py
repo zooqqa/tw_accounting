@@ -14,7 +14,7 @@ from app.models.categories import Category, CategoryCreate, CategoryUpdate, Cate
 router = APIRouter()
 
 @router.get("/", response_model=List[CategoryRead])
-async def get_categories(
+def get_categories(
     skip: int = 0,
     limit: int = 100,
     db: Session = Depends(get_session),
@@ -26,7 +26,7 @@ async def get_categories(
     return categories
 
 @router.get("/{category_id}", response_model=CategoryRead)
-async def get_category(
+def get_category(
     category_id: int,
     db: Session = Depends(get_session),
     user: User = Depends(current_active_user)
@@ -41,20 +41,20 @@ async def get_category(
     return category
 
 @router.post("/", response_model=CategoryRead)
-async def create_category(
+def create_category(
     category_data: CategoryCreate,
     db: Session = Depends(get_session),
     user: User = Depends(current_active_user)
 ):
     """Создание новой категории"""
-    category = Category(**category_data.dict())
+    category = Category(**category_data.model_dump())
     db.add(category)
     db.commit()
     db.refresh(category)
     return category
 
 @router.put("/{category_id}", response_model=CategoryRead)
-async def update_category(
+def update_category(
     category_id: int,
     category_data: CategoryUpdate,
     db: Session = Depends(get_session),
@@ -68,7 +68,7 @@ async def update_category(
             detail="Category not found"
         )
     
-    for field, value in category_data.dict(exclude_unset=True).items():
+    for field, value in category_data.model_dump(exclude_unset=True).items():
         setattr(category, field, value)
     
     db.add(category)
@@ -77,7 +77,7 @@ async def update_category(
     return category
 
 @router.delete("/{category_id}")
-async def delete_category(
+def delete_category(
     category_id: int,
     db: Session = Depends(get_session),
     user: User = Depends(current_active_user)
