@@ -30,8 +30,8 @@ class Project(BaseModel, table=True):
     end_date: Optional[datetime] = Field(default=None, description="Дата окончания")
     budget: Optional[float] = Field(default=None, description="Бюджет проекта")
     
-    # Связи
-    transactions: List["Transaction"] = Relationship(back_populates="project")
+    # Связи (временно отключены)
+    # transactions: List["Transaction"] = Relationship(back_populates="project")
 
 
 class ProjectCreate(SQLModel):

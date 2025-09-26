@@ -58,11 +58,12 @@ async def root():
         "docs": "/docs"
     }
 
-# Импорт API роутов (временно отключены для запуска)
-# from app.api import auth, accounts, projects, categories, counterparties
+# Импорт API роутов
+from app.api import auth
+# from app.api import accounts, projects, categories, counterparties
 
-# Включение роутов (временно отключены)
-# app.include_router(auth.router, prefix="/api", tags=["authentication"])
+# Включение роутов
+app.include_router(auth.router, prefix="/api", tags=["authentication"])
 # app.include_router(accounts.router, prefix="/api/accounts", tags=["accounts"])
 # app.include_router(projects.router, prefix="/api/projects", tags=["projects"])
 # app.include_router(categories.router, prefix="/api/categories", tags=["categories"])

@@ -30,8 +30,8 @@ class Account(BaseModel, table=True):
     description: Optional[str] = Field(default=None, description="Описание счета")
     is_active: bool = Field(default=True, description="Активен ли счет")
     
-    # Связи
-    transaction_entries: List["TransactionEntry"] = Relationship(back_populates="account")
+    # Связи (временно отключены)
+    # transaction_entries: List["TransactionEntry"] = Relationship(back_populates="account")
 
 
 class AccountCreate(SQLModel):

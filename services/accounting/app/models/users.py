@@ -4,12 +4,12 @@
 
 from datetime import datetime
 from typing import Optional
-from sqlmodel import SQLModel, Field, Relationship
+from sqlmodel import SQLModel, Field
 from app.models.base import BaseModel
 
 
 class User(BaseModel, table=True):
-    """Модель пользователя"""
+    """Простая модель пользователя"""
     
     __tablename__ = "users"
     
@@ -18,15 +18,26 @@ class User(BaseModel, table=True):
     hashed_password: str = Field(max_length=255, description="Хешированный пароль")
     is_active: bool = Field(default=True, description="Активен ли пользователь")
     is_superuser: bool = Field(default=False, description="Суперпользователь")
+    is_verified: bool = Field(default=False, description="Подтвержден ли email")
     
     # Дополнительные поля пользователя
     first_name: Optional[str] = Field(default=None, max_length=255, description="Имя")
-    last_name: Optional[str] = Field(default=None, max_length=255, description="Фамилия")
+    last_name: Optional[str] = Field(default=None, max_length=255, description="Фамилия") 
     phone: Optional[str] = Field(default=None, max_length=50, description="Телефон")
-    is_verified: bool = Field(default=False, description="Подтвержден ли email")
-    
-    # Связи
-    # transactions: List["Transaction"] = Relationship(back_populates="user")
+
+
+class UserRead(SQLModel):
+    """Схема для чтения пользователя"""
+    id: int
+    email: str
+    first_name: Optional[str]
+    last_name: Optional[str]
+    phone: Optional[str]
+    is_active: bool
+    is_superuser: bool
+    is_verified: bool
+    created_at: datetime
+    updated_at: Optional[datetime]
 
 
 class UserCreate(SQLModel):
@@ -45,15 +56,18 @@ class UserUpdate(SQLModel):
     phone: Optional[str] = None
 
 
-class UserRead(SQLModel):
-    """Схема для чтения пользователя"""
-    id: int
+class UserLogin(SQLModel):
+    """Схема для входа пользователя"""
     email: str
-    first_name: Optional[str]
-    last_name: Optional[str]
-    phone: Optional[str]
-    is_verified: bool
-    is_active: bool
-    is_superuser: bool
-    created_at: datetime
-    updated_at: Optional[datetime]
+    password: str
+
+
+class Token(SQLModel):
+    """Схема токена"""
+    access_token: str
+    token_type: str
+
+
+class TokenData(SQLModel):
+    """Данные токена"""
+    email: Optional[str] = None

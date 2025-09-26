@@ -29,10 +29,10 @@ class Category(BaseModel, table=True):
     color: Optional[str] = Field(default=None, max_length=7, description="Цвет категории (hex)")
     icon: Optional[str] = Field(default=None, max_length=50, description="Иконка категории")
     
-    # Связи
-    parent: Optional["Category"] = Relationship(back_populates="children", sa_relationship_kwargs={"remote_side": "Category.id"})
-    children: List["Category"] = Relationship(back_populates="parent")
-    transactions: List["Transaction"] = Relationship(back_populates="category")
+    # Связи (временно отключены)
+    # parent: Optional["Category"] = Relationship(back_populates="children", sa_relationship_kwargs={"remote_side": "Category.id"})
+    # children: List["Category"] = Relationship(back_populates="parent")
+    # transactions: List["Transaction"] = Relationship(back_populates="category")
 
 
 class CategoryCreate(SQLModel):

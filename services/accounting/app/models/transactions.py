@@ -41,12 +41,12 @@ class Transaction(BaseModel, table=True):
     category_id: Optional[int] = Field(default=None, foreign_key="categories.id", description="ID категории")
     counterparty_id: Optional[int] = Field(default=None, foreign_key="counterparties.id", description="ID контрагента")
     
-    # Связи
-    project: Optional["Project"] = Relationship(back_populates="transactions")
-    category: Optional["Category"] = Relationship(back_populates="transactions")
-    counterparty: Optional["Counterparty"] = Relationship(back_populates="transactions")
-    entries: List["TransactionEntry"] = Relationship(back_populates="transaction")
-    crypto_details: Optional["CryptoTransactionDetail"] = Relationship(back_populates="transaction")
+    # Связи (временно отключены)
+    # project: Optional["Project"] = Relationship(back_populates="transactions")
+    # category: Optional["Category"] = Relationship(back_populates="transactions")
+    # counterparty: Optional["Counterparty"] = Relationship(back_populates="transactions")
+    # entries: List["TransactionEntry"] = Relationship(back_populates="transaction")
+    # crypto_details: Optional["CryptoTransactionDetail"] = Relationship(back_populates="transaction")
 
 
 class TransactionEntry(BaseModel, table=True):
@@ -60,9 +60,9 @@ class TransactionEntry(BaseModel, table=True):
     direction: str = Field(max_length=10, description="Направление (DEBIT/CREDIT)")
     description: Optional[str] = Field(default=None, description="Описание проводки")
     
-    # Связи
-    transaction: Transaction = Relationship(back_populates="entries")
-    account: "Account" = Relationship(back_populates="transaction_entries")
+    # Связи (временно отключены)
+    # transaction: Transaction = Relationship(back_populates="entries")
+    # account: "Account" = Relationship(back_populates="transaction_entries")
 
 
 class CryptoTransactionDetail(BaseModel, table=True):
@@ -79,8 +79,8 @@ class CryptoTransactionDetail(BaseModel, table=True):
     block_number: Optional[int] = Field(default=None, description="Номер блока")
     confirmation_count: Optional[int] = Field(default=None, description="Количество подтверждений")
     
-    # Связи
-    transaction: Transaction = Relationship(back_populates="crypto_details")
+    # Связи (временно отключены)
+    # transaction: Transaction = Relationship(back_populates="crypto_details")
 
 
 # Схемы для API

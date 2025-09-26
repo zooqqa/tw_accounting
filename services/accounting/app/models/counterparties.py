@@ -32,9 +32,9 @@ class Counterparty(BaseModel, table=True):
     description: Optional[str] = Field(default=None, description="Описание")
     is_active: bool = Field(default=True, description="Активен ли контрагент")
     
-    # Связи
-    transactions: List["Transaction"] = Relationship(back_populates="counterparty")
-    invoices: List["Invoice"] = Relationship(back_populates="counterparty")
+    # Связи (временно отключены)
+    # transactions: List["Transaction"] = Relationship(back_populates="counterparty")
+    # invoices: List["Invoice"] = Relationship(back_populates="counterparty")
 
 
 class CounterpartyCreate(SQLModel):
